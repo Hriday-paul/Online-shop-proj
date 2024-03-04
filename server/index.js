@@ -2,16 +2,19 @@ const express = require('express');
 const app = express();
 require("dotenv").config();
 const cors = require("cors");
-const port = process.env.PORT | 3000;
+const port = process.env.PORT || 3000;
 const connectDb = require("./config/connectDb");
-
-app.get('/', (req,res)=>{
-    res.send({status : 'ok'})
-})
 
 app.use(express.json());
 app.use(cors());
 connectDb();
+
+app.use("/api",require("./routs/rout"));
+
+
+app.get('/', (req,res)=>{
+    res.send({status : 'true', setUp : 'ok'})
+})
 
 // error handler any place
 
