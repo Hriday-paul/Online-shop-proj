@@ -4,11 +4,33 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FcBusinessman } from "react-icons/fc";
 import { CiLogin, CiSearch } from "react-icons/ci";
 import { MdOutlineFavoriteBorder, MdCompare, MdOutlinePhoneInTalk } from "react-icons/md";
-import { BsCartCheck } from "react-icons/bs";
 import { RiMenu3Fill } from "react-icons/ri";
 import { IoMdMenu } from "react-icons/io";
+import { useContext, useEffect, useState } from "react";
+import { filteringContext } from "../../../ContextHandler/FilterContext/FilterContext";
+import { authContext } from '../../../ContextHandler/Authonicate/Authonicate'
+import { Badge, Drawer } from "antd";
+import SingleCart from "../../Ui/SingleCart/SingleCart";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 
 const Navbar = () => {
+    const { getCartProduct, cartProduct } = useContext(filteringContext);
+    const { userInfo } = useContext(authContext);
+    const [openDrawer, setOpenDrawer] = useState(false);
+
+    const showDrawer = () => {
+        setOpenDrawer(true);
+    };
+    const onClose = () => {
+        setOpenDrawer(false);
+    };
+
+    useEffect(() => {
+        if (userInfo) {
+            getCartProduct(userInfo.email)
+        }
+    }, [userInfo])
+
     return (
         <div>
             {/* contact bar */}
@@ -88,27 +110,71 @@ const Navbar = () => {
                         <div className="flex justify-end items-center">
                             <div className="relative group flex items-center justify-center md:mr-5 lg:mr-8">
                                 <Link to='/'>
-                                    <MdOutlineFavoriteBorder className="text-orange-500 text-3xl"></MdOutlineFavoriteBorder>
+                                    <MdOutlineFavoriteBorder className="text-3xl"></MdOutlineFavoriteBorder>
                                 </Link>
                             </div>
                             <div className="relative group flex items-center justify-center md:mr-5 lg:mr-8">
                                 <Link to='/' >
-                                    <MdCompare className="text-orange-500 text-3xl"></MdCompare>
+                                    <MdCompare className="text-3xl"></MdCompare>
                                 </Link>
                             </div>
                             <div className="relative group flex items-center justify-center mr-3">
-                                <Link to='/' >
-                                    <BsCartCheck className="text-orange-500 text-3xl"></BsCartCheck>
-                                </Link>
+                                <div>
+                                    <Badge size="default" count={cartProduct?.length}>
+                                        <HiOutlineShoppingBag onClick={showDrawer} className=" text-3xl"></HiOutlineShoppingBag>
+                                    </Badge>
+
+                                    <Drawer title="My cart" onClose={onClose} open={openDrawer}>
+                                        <div className='flex flex-col gap-y-2 '>
+                                            {
+                                                cartProduct.length > 0 ? <div>
+                                                    {
+                                                        cartProduct?.map((toy) => {
+                                                            return <SingleCart key={toy._id} Cproduct={toy}></SingleCart>
+                                                        })
+
+                                                    }
+                                                    
+                                                    <div className="m-5 mb-2 flex flex-row justify-center gap-x-2">
+                                                        <Link to="/myCart" className="relative px-5 py-3 overflow-hidden font-medium text-gray-600 bg-gray-100 border border-gray-100 shadow-inner group rounded-full">
+                                                            <span className="absolute top-0 left-0 w-0 h-0 transition-all duration-200 group-hover:w-full ease rounded-full"></span>
+                                                            <span className="absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 group-hover:w-full ease rounded-full"></span>
+                                                            <span className="absolute top-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-orange-300 group-hover:h-full ease rounded-full"></span>
+                                                            <span className="absolute bottom-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-orange-300 group-hover:h-full ease rounded-full"></span>
+                                                            <span className="absolute inset-0 w-full h-full duration-300 delay-300 bg-orange-400 opacity-0 group-hover:opacity-100 rounded-full"></span>
+                                                            <span className="relative transition-colors duration-300 delay-200 group-hover:text-white ease rounded-full">View Cart</span>
+                                                        </Link>
+
+                                                        <Link to="/checkOut" className="relative px-5 py-3 overflow-hidden font-medium text-gray-600 bg-gray-100 border border-gray-100 shadow-inner group rounded-full">
+                                                            <span className="absolute top-0 left-0 w-0 h-0 transition-all duration-200 group-hover:w-full ease rounded-full"></span>
+                                                            <span className="absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 group-hover:w-full ease rounded-full"></span>
+                                                            <span className="absolute top-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-orange-300 group-hover:h-full ease rounded-full"></span>
+                                                            <span className="absolute bottom-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-orange-300 group-hover:h-full ease rounded-full"></span>
+                                                            <span className="absolute inset-0 w-full h-full duration-300 delay-300 bg-orange-400 opacity-0 group-hover:opacity-100 rounded-full"></span>
+                                                            <span className="relative transition-colors duration-300 delay-200 group-hover:text-white ease rounded-full">Check Out</span>
+                                                        </Link>
+                                                    </div>
+
+                                                </div> : <div className='min-h-80 flex flex-col items-center justify-center'>
+                                                    <img className='h-40 w-40' src='https://cdni.iconscout.com/illustration/premium/thumb/empty-cart-7359557-6024626.png' />
+                                                    <h3 className='text-xl font-nunito '>You have no cart</h3>
+                                                </div>
+                                            }
+
+                                        </div>
+                                    </Drawer>
+
+                                </div>
+
                             </div>
                         </div>
 
                     </div>
                 </div>
-            </div>
+            </div >
 
             {/* navbar */}
-            <nav className="bg-gray-800">
+            <nav className="bg-gray-800" >
                 <div className="max-w-7xl mx-auto px-4 md:px-0">
                     <div className="grid grid-cols-4 justify-between items-center">
                         <div className="col-span-1 bg-orange-400">
@@ -140,9 +206,9 @@ const Navbar = () => {
                         </div>
                     </div>
                 </div>
-            </nav>
+            </nav >
 
-        </div>
+        </div >
     );
 };
 

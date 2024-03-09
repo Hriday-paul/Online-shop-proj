@@ -1,8 +1,7 @@
 import { useContext } from 'react'
 import { Navigate, useLocation } from 'react-router-dom';
-import { LoadingOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
 import { authContext } from '../../../ContextHandler/Authonicate/Authonicate';
+import {PropagateLoader} from 'react-spinners'
 
 
 function Private({ children }) {
@@ -11,17 +10,10 @@ function Private({ children }) {
 
     if (loading) {
         return <div className="min-h-[90vh] flex justify-center items-center">
-            <Spin
-                size='large'
-                indicator={
-                    <LoadingOutlined
-                        style={{
-                            fontSize: 40,
-                            fontWeight: 'bold'
-                        }}
-                        spin
-                    />
-                }
+            <PropagateLoader
+                color="#FB923C"
+                size={17}
+                speedMultiplier={1}
             />
 
         </div>
@@ -31,7 +23,7 @@ function Private({ children }) {
         return children;
     }
 
-    return <Navigate state={{ from: location.pathname || '/' }} to="/login" replace></Navigate>
+    return <Navigate state={{ from: location.pathname }} to="/login" replace></Navigate>
 }
 
 export default Private

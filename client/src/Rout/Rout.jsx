@@ -7,6 +7,10 @@ import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import Category from "../Pages/Category/Category";
 import Products from "../Pages/Products/Products";
+import Details from "../Pages/Details/Details";
+import Private from "../Components/shared/Private/Private";
+import MyCart from "../Pages/MyCart/MyCart";
+import CheckOut from "../Pages/CheckOut/CheckOut";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +30,19 @@ const router = createBrowserRouter([
             element: <Products />,
           }
         ]
-      }
+      },
+      {
+        path: "/product/:categoryName/:id",
+        element: <Details />,
+      },
+      {
+        path: "/myCart",
+        element: <Private><MyCart></MyCart></Private>,
+      },
+      {
+        path: "/checkOut",
+        element: <Private><CheckOut></CheckOut></Private>,
+      },
     ]
   },
   {

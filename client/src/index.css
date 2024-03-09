@@ -10,3 +10,7 @@
     color: #025BAA;
     font-size: 35px !important;
 }
+
+.ant-rate-star{
+    margin-inline-end: 0 !important;
+}
